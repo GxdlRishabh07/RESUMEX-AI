@@ -1,0 +1,82 @@
+{
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/vite.config.ts": {
+    "mtime": 1785675298.8941462,
+    "hash": "9c319043c25764dfe83b687f74637c6c"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/server.ts": {
+    "mtime": 1785675298.8974516,
+    "hash": "bebc8f76b3c5fa3db09447188d72e30d"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/App.tsx": {
+    "mtime": 1785675298.8929315,
+    "hash": "571b504298ef259dd17916520672a117"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/main.tsx": {
+    "mtime": 1785675298.893565,
+    "hash": "2b36426d5ad7e08ef79746aa524f4fb7"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/types.ts": {
+    "mtime": 1785675298.8959515,
+    "hash": "dac4921bdb47cbe7848fe345697fb68b"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/Navbar.tsx": {
+    "mtime": 1785675298.8981946,
+    "hash": "2668cbb1fb3d06c5476749d0e47937aa"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/ResultCard.tsx": {
+    "mtime": 1785675298.899669,
+    "hash": "5538db434e45f1191c20b6012fc40b75"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/JobDescriptionInput.tsx": {
+    "mtime": 1785675298.898913,
+    "hash": "b46a0442d8b3615baa3eaff7ea0610db"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/ResumeInput.tsx": {
+    "mtime": 1785675298.898639,
+    "hash": "0c4527d959bb0486c80a9dd8a037fbd9"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/Footer.tsx": {
+    "mtime": 1785675298.900102,
+    "hash": "4cb5ba0a9e41be6accef3630342ff9e6"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/OptimizeButton.tsx": {
+    "mtime": 1785675298.899285,
+    "hash": "3ed86e2e6041ebcef31f0feac612aa73"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/HeroSection.tsx": {
+    "mtime": 1785675298.8983984,
+    "hash": "f1038b2b8db238442cd81f02836b7dc4"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/InitialScoreCard.tsx": {
+    "mtime": 1785675298.9005868,
+    "hash": "65506d3b44fb3a1307263efd3ca3ec9f"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/components/ErrorAlert.tsx": {
+    "mtime": 1785675298.899894,
+    "hash": "41da1c4a1c202495b0cc8ad04527bf0d"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/data/samples.ts": {
+    "mtime": 1785675298.897836,
+    "hash": "8c709816cbb99090e77416ebc119fdd8"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/routes/optimizeRoute.ts": {
+    "mtime": 1785675298.89723,
+    "hash": "9595130d2c58602badbf9a1c42bfba0c"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/services/geminiService.ts": {
+    "mtime": 1785675298.8968487,
+    "hash": "e7108221df63c634e350ceed08ed88d8"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/src/services/promptBuilder.ts": {
+    "mtime": 1785675298.8965323,
+    "hash": "1939477da8b0bbb7c0435ceddf7bfc45"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/index.html": {
+    "mtime": 1785675298.8918633,
+    "hash": "c6cdc88c3abec682e37d1f35b7b4ad0b"
+  },
+  "/Users/rishabhpatil/Desltop/PROJECT/AI-Resume-Optimizer-2026-08-02-a40fc/README.md": {
+    "mtime": 1785675298.900796,
+    "hash": "902d15fc917d1ff8a8c1ebc0a46f943d"
+  }
+}

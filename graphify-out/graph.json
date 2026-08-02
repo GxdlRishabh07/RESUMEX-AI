@@ -1,0 +1,792 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "vite.config.ts",
+      "file_type": "code",
+      "source_file": "vite.config.ts",
+      "source_location": "L1",
+      "id": "vite_config_ts",
+      "community": 6,
+      "norm_label": "vite.config.ts"
+    },
+    {
+      "label": "server.ts",
+      "file_type": "code",
+      "source_file": "server.ts",
+      "source_location": "L1",
+      "id": "server_ts",
+      "community": 3,
+      "norm_label": "server.ts"
+    },
+    {
+      "label": "startServer()",
+      "file_type": "code",
+      "source_file": "server.ts",
+      "source_location": "L10",
+      "id": "ai_resume_optimizer_2026_08_02_a40fc_server_startserver",
+      "community": 3,
+      "norm_label": "startserver()"
+    },
+    {
+      "label": "App.tsx",
+      "file_type": "code",
+      "source_file": "src/App.tsx",
+      "source_location": "L1",
+      "id": "src_app_tsx",
+      "community": 0,
+      "norm_label": "app.tsx"
+    },
+    {
+      "label": "handleLoadSample()",
+      "file_type": "code",
+      "source_file": "src/App.tsx",
+      "source_location": "L26",
+      "id": "src_app_handleloadsample",
+      "community": 0,
+      "norm_label": "handleloadsample()"
+    },
+    {
+      "label": "handleAnalyzeScore()",
+      "file_type": "code",
+      "source_file": "src/App.tsx",
+      "source_location": "L36",
+      "id": "src_app_handleanalyzescore",
+      "community": 0,
+      "norm_label": "handleanalyzescore()"
+    },
+    {
+      "label": "handleOptimize()",
+      "file_type": "code",
+      "source_file": "src/App.tsx",
+      "source_location": "L90",
+      "id": "src_app_handleoptimize",
+      "community": 0,
+      "norm_label": "handleoptimize()"
+    },
+    {
+      "label": "handleKeyDown()",
+      "file_type": "code",
+      "source_file": "src/App.tsx",
+      "source_location": "L149",
+      "id": "src_app_handlekeydown",
+      "community": 0,
+      "norm_label": "handlekeydown()"
+    },
+    {
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L1",
+      "id": "src_main_tsx",
+      "community": 0,
+      "norm_label": "main.tsx"
+    },
+    {
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "src/types.ts",
+      "source_location": "L1",
+      "id": "src_types_ts",
+      "community": 2,
+      "norm_label": "types.ts"
+    },
+    {
+      "label": "Navbar.tsx",
+      "file_type": "code",
+      "source_file": "src/components/Navbar.tsx",
+      "source_location": "L1",
+      "id": "src_components_navbar_tsx",
+      "community": 4,
+      "norm_label": "navbar.tsx"
+    },
+    {
+      "label": "checkHealth()",
+      "file_type": "code",
+      "source_file": "src/components/Navbar.tsx",
+      "source_location": "L11",
+      "id": "components_navbar_checkhealth",
+      "community": 4,
+      "norm_label": "checkhealth()"
+    },
+    {
+      "label": "ResultCard.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ResultCard.tsx",
+      "source_location": "L1",
+      "id": "src_components_resultcard_tsx",
+      "community": 2,
+      "norm_label": "resultcard.tsx"
+    },
+    {
+      "label": "ResultCard()",
+      "file_type": "code",
+      "source_file": "src/components/ResultCard.tsx",
+      "source_location": "L25",
+      "id": "components_resultcard_resultcard",
+      "community": 2,
+      "norm_label": "resultcard()"
+    },
+    {
+      "label": "JobDescriptionInput.tsx",
+      "file_type": "code",
+      "source_file": "src/components/JobDescriptionInput.tsx",
+      "source_location": "L1",
+      "id": "src_components_jobdescriptioninput_tsx",
+      "community": 2,
+      "norm_label": "jobdescriptioninput.tsx"
+    },
+    {
+      "label": "ResumeInput.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ResumeInput.tsx",
+      "source_location": "L1",
+      "id": "src_components_resumeinput_tsx",
+      "community": 5,
+      "norm_label": "resumeinput.tsx"
+    },
+    {
+      "label": "handleFileUpload()",
+      "file_type": "code",
+      "source_file": "src/components/ResumeInput.tsx",
+      "source_location": "L16",
+      "id": "components_resumeinput_handlefileupload",
+      "community": 5,
+      "norm_label": "handlefileupload()"
+    },
+    {
+      "label": "Footer.tsx",
+      "file_type": "code",
+      "source_file": "src/components/Footer.tsx",
+      "source_location": "L1",
+      "id": "src_components_footer_tsx",
+      "community": 0,
+      "norm_label": "footer.tsx"
+    },
+    {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "src/components/Footer.tsx",
+      "source_location": "L4",
+      "id": "components_footer_footer",
+      "community": 0,
+      "norm_label": "footer()"
+    },
+    {
+      "label": "OptimizeButton.tsx",
+      "file_type": "code",
+      "source_file": "src/components/OptimizeButton.tsx",
+      "source_location": "L1",
+      "id": "src_components_optimizebutton_tsx",
+      "community": 7,
+      "norm_label": "optimizebutton.tsx"
+    },
+    {
+      "label": "HeroSection.tsx",
+      "file_type": "code",
+      "source_file": "src/components/HeroSection.tsx",
+      "source_location": "L1",
+      "id": "src_components_herosection_tsx",
+      "community": 0,
+      "norm_label": "herosection.tsx"
+    },
+    {
+      "label": "HeroSection()",
+      "file_type": "code",
+      "source_file": "src/components/HeroSection.tsx",
+      "source_location": "L4",
+      "id": "components_herosection_herosection",
+      "community": 0,
+      "norm_label": "herosection()"
+    },
+    {
+      "label": "InitialScoreCard.tsx",
+      "file_type": "code",
+      "source_file": "src/components/InitialScoreCard.tsx",
+      "source_location": "L1",
+      "id": "src_components_initialscorecard_tsx",
+      "community": 2,
+      "norm_label": "initialscorecard.tsx"
+    },
+    {
+      "label": "getScoreBadge()",
+      "file_type": "code",
+      "source_file": "src/components/InitialScoreCard.tsx",
+      "source_location": "L36",
+      "id": "components_initialscorecard_getscorebadge",
+      "community": 2,
+      "norm_label": "getscorebadge()"
+    },
+    {
+      "label": "ErrorAlert.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ErrorAlert.tsx",
+      "source_location": "L1",
+      "id": "src_components_erroralert_tsx",
+      "community": 2,
+      "norm_label": "erroralert.tsx"
+    },
+    {
+      "label": "samples.ts",
+      "file_type": "code",
+      "source_file": "src/data/samples.ts",
+      "source_location": "L1",
+      "id": "src_data_samples_ts",
+      "community": 2,
+      "norm_label": "samples.ts"
+    },
+    {
+      "label": "optimizeRoute.ts",
+      "file_type": "code",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L1",
+      "id": "src_routes_optimizeroute_ts",
+      "community": 1,
+      "norm_label": "optimizeroute.ts"
+    },
+    {
+      "label": "geminiService.ts",
+      "file_type": "code",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L1",
+      "id": "src_services_geminiservice_ts",
+      "community": 1,
+      "norm_label": "geminiservice.ts"
+    },
+    {
+      "label": "getGeminiClient()",
+      "file_type": "code",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L12",
+      "id": "services_geminiservice_getgeminiclient",
+      "community": 1,
+      "norm_label": "getgeminiclient()"
+    },
+    {
+      "label": "testGeminiConnection()",
+      "file_type": "code",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L35",
+      "id": "services_geminiservice_testgeminiconnection",
+      "community": 1,
+      "norm_label": "testgeminiconnection()"
+    },
+    {
+      "label": "analyzeAtsScoreWithGemini()",
+      "file_type": "code",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L63",
+      "id": "services_geminiservice_analyzeatsscorewithgemini",
+      "community": 1,
+      "norm_label": "analyzeatsscorewithgemini()"
+    },
+    {
+      "label": "optimizeResumeWithGemini()",
+      "file_type": "code",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L123",
+      "id": "services_geminiservice_optimizeresumewithgemini",
+      "community": 1,
+      "norm_label": "optimizeresumewithgemini()"
+    },
+    {
+      "label": "promptBuilder.ts",
+      "file_type": "code",
+      "source_file": "src/services/promptBuilder.ts",
+      "source_location": "L1",
+      "id": "src_services_promptbuilder_ts",
+      "community": 1,
+      "norm_label": "promptbuilder.ts"
+    },
+    {
+      "label": "buildAtsAnalysisPrompt()",
+      "file_type": "code",
+      "source_file": "src/services/promptBuilder.ts",
+      "source_location": "L15",
+      "id": "services_promptbuilder_buildatsanalysisprompt",
+      "community": 1,
+      "norm_label": "buildatsanalysisprompt()"
+    },
+    {
+      "label": "buildAtsOptimizationPrompt()",
+      "file_type": "code",
+      "source_file": "src/services/promptBuilder.ts",
+      "source_location": "L60",
+      "id": "services_promptbuilder_buildatsoptimizationprompt",
+      "community": 1,
+      "norm_label": "buildatsoptimizationprompt()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_routes_optimizeroute_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "ai_resume_optimizer_2026_08_02_a40fc_server_startserver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "components_herosection_herosection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "components_resultcard_resultcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "components_footer_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_data_samples_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_app_handleloadsample",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_app_handleanalyzescore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_app_handleoptimize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "src_app_tsx",
+      "target": "src_app_handlekeydown",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_main_tsx",
+      "target": "src_app_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.tsx",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_app_handlekeydown",
+      "target": "src_app_handleoptimize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ResultCard.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_components_resultcard_tsx",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/InitialScoreCard.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_components_initialscorecard_tsx",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ErrorAlert.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_erroralert_tsx",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/samples.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_data_samples_ts",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_routes_optimizeroute_ts",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "src_types_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Navbar.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_components_navbar_tsx",
+      "target": "components_navbar_checkhealth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ResultCard.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "src_components_resultcard_tsx",
+      "target": "components_resultcard_resultcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/JobDescriptionInput.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_jobdescriptioninput_tsx",
+      "target": "src_data_samples_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ResumeInput.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_components_resumeinput_tsx",
+      "target": "components_resumeinput_handlefileupload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_footer_tsx",
+      "target": "components_footer_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/HeroSection.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_herosection_tsx",
+      "target": "components_herosection_herosection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/InitialScoreCard.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "src_components_initialscorecard_tsx",
+      "target": "components_initialscorecard_getscorebadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_routes_optimizeroute_ts",
+      "target": "src_services_geminiservice_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_routes_optimizeroute_ts",
+      "target": "services_geminiservice_optimizeresumewithgemini",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_routes_optimizeroute_ts",
+      "target": "services_geminiservice_analyzeatsscorewithgemini",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/optimizeRoute.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_routes_optimizeroute_ts",
+      "target": "services_geminiservice_testgeminiconnection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "src_services_promptbuilder_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_promptbuilder_buildatsoptimizationprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_promptbuilder_buildatsanalysisprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_geminiservice_getgeminiclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_geminiservice_testgeminiconnection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_geminiservice_analyzeatsscorewithgemini",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "src_services_geminiservice_ts",
+      "target": "services_geminiservice_optimizeresumewithgemini",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "services_geminiservice_testgeminiconnection",
+      "target": "services_geminiservice_getgeminiclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "services_geminiservice_analyzeatsscorewithgemini",
+      "target": "services_geminiservice_getgeminiclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "services_geminiservice_optimizeresumewithgemini",
+      "target": "services_geminiservice_getgeminiclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "services_geminiservice_analyzeatsscorewithgemini",
+      "target": "services_promptbuilder_buildatsanalysisprompt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/services/geminiService.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "services_geminiservice_optimizeresumewithgemini",
+      "target": "services_promptbuilder_buildatsoptimizationprompt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/promptBuilder.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "src_services_promptbuilder_ts",
+      "target": "services_promptbuilder_buildatsanalysisprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/promptBuilder.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_services_promptbuilder_ts",
+      "target": "services_promptbuilder_buildatsoptimizationprompt",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}
