@@ -9,13 +9,14 @@ import {
   CheckCircle2,
   PlusCircle,
   FileText,
-  Code2,
   AlertTriangle,
   Lightbulb,
   Award,
   ChevronRight,
 } from 'lucide-react';
 import { OptimizeResumeResponse } from '../types.js';
+import { ResumeDocumentView } from './ResumeDocumentView';
+import { normalizeResumeMarkdown } from '../utils/resumeFormatter';
 
 interface ResultCardProps {
   data: OptimizeResumeResponse;
@@ -40,34 +41,23 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
     rawAnalysis,
   } = data;
 
-  // Final score is either optimizedScore or matchScore
+  // Final score calculation
   const finalScore = optimizedScore || matchScore || 90;
   const originalScore = initialScore || Math.max(30, finalScore - 38);
   const boost = scoreBoost || Math.max(0, finalScore - originalScore);
 
-  // Score color helper
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
-    if (score >= 65) return 'text-blue-400 border-blue-500/30 bg-blue-500/10';
-    return 'text-amber-400 border-amber-500/30 bg-amber-500/10';
-  };
+  const cleanedResume = normalizeResumeMarkdown(optimizedResume);
 
-  const getScoreGradient = (score: number) => {
-    if (score >= 80) return 'from-emerald-500 to-teal-400';
-    if (score >= 65) return 'from-blue-500 to-indigo-400';
-    return 'from-amber-500 to-orange-400';
-  };
-
-  // Copy to clipboard
+  // Copy to clipboard handler
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(optimizedResume);
+      await navigator.clipboard.writeText(cleanedResume);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
       // Fallback
       const el = document.createElement('textarea');
-      el.value = optimizedResume;
+      el.value = cleanedResume;
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
@@ -77,9 +67,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
     }
   };
 
-  // Download Markdown file
+  // Download Markdown file handler
   const handleDownload = () => {
-    const blob = new Blob([optimizedResume], { type: 'text/markdown;charset=utf-8' });
+    const blob = new Blob([cleanedResume], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -90,7 +80,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
     URL.revokeObjectURL(url);
   };
 
-  // Print / Export PDF
+  // Print / Export PDF handler
   const handlePrint = () => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -104,11 +94,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
         <head>
           <title>Optimized Resume</title>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 40px; color: #111; line-height: 1.6; }
-            h1 { border-bottom: 2px solid #222; padding-bottom: 6px; margin-bottom: 12px; }
-            h2 { border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 24px; margin-bottom: 10px; color: #1a202c; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 40px; color: #0f172a; line-height: 1.6; }
+            h1 { font-size: 24px; text-transform: uppercase; letter-spacing: 0.04em; text-align: center; margin-bottom: 6px; }
+            h2 { border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-top: 24px; margin-bottom: 10px; color: #1e3a8a; text-transform: uppercase; font-size: 14px; }
+            h3 { font-size: 14px; margin-top: 12px; margin-bottom: 4px; }
             ul { padding-left: 20px; }
             li { margin-bottom: 6px; }
+            p { margin-top: 4px; margin-bottom: 8px; }
             @media print { body { padding: 0; } }
           </style>
         </head>
@@ -116,7 +108,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
           <div id="print-content"></div>
           <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
           <script>
-            document.getElementById('print-content').innerHTML = marked.parse(${JSON.stringify(optimizedResume)});
+            document.getElementById('print-content').innerHTML = marked.parse(${JSON.stringify(cleanedResume)});
             setTimeout(() => { window.print(); window.close(); }, 500);
           </script>
         </body>
@@ -126,24 +118,51 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
   };
 
   return (
-    <div id="card-result-container" className="bg-slate-900/95 rounded-3xl border border-slate-800 p-6 shadow-2xl mt-8">
-      {/* Top Banner: Score & Summary Overview */}
-      <div className="flex flex-col xl:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
-        {/* Before vs After ATS Score Comparison */}
-        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full xl:w-auto bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
+    <div
+      id="card-result-container"
+      className="animate-fade-in-up card"
+      style={{
+        marginTop: '32px',
+      }}
+    >
+      {/* Card Top Banner: Score & Action Controls */}
+      <div
+        className="card-header"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '20px',
+        }}
+      >
+        {/* Score Comparison Box */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            background: 'var(--color-surface-low)',
+            border: '1px solid var(--border-ghost)',
+            borderRadius: '8px',
+            padding: '12px 20px',
+            boxShadow: 'var(--shadow-card)',
+          }}
+        >
           {/* Before Score */}
-          <div className="flex items-center space-x-3">
-            <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
+              <svg style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }} viewBox="0 0 36 36">
                 <path
-                  className="text-slate-800"
+                  style={{ color: 'var(--color-surface-high-2, #262a34)' }}
                   strokeWidth="3.5"
                   stroke="currentColor"
                   fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
                 <path
-                  className="text-amber-500/80"
+                  style={{ color: '#d97706' }}
                   strokeDasharray={`${originalScore}, 100`}
                   strokeWidth="3.5"
                   strokeLinecap="round"
@@ -152,35 +171,44 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-amber-300">{originalScore}%</span>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#d97706' }}>{originalScore}%</span>
               </div>
             </div>
             <div>
-              <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Before</span>
-              <span className="text-xs font-medium text-slate-300">Initial Score</span>
+              <span style={{ display: 'block', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-on-surface-variant)' }}>Before</span>
+              <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-on-surface-variant)' }}>Initial Score</span>
             </div>
           </div>
 
-          {/* Boost Badge / Arrow */}
-          <div className="flex flex-col items-center justify-center px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-            <span className="text-xs font-black tracking-wide">+{boost}% Boost</span>
-            <span className="text-[9px] font-semibold text-emerald-300/80 uppercase">Score Increase</span>
+          {/* Score Boost Pill */}
+          <div
+            style={{
+              padding: '4px 10px',
+              borderRadius: '9999px',
+              background: 'rgba(76, 215, 246, 0.1)',
+              border: '1px solid rgba(76, 215, 246, 0.25)',
+              color: 'var(--color-tertiary)',
+              textAlign: 'center',
+            }}
+          >
+            <span style={{ fontSize: '12px', fontWeight: 700, display: 'block', lineHeight: 1 }}>+{boost}%</span>
+            <span style={{ fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', opacity: 0.85 }}>Boost</span>
           </div>
 
           {/* After Score */}
-          <div className="flex items-center space-x-3">
-            <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
+              <svg style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }} viewBox="0 0 36 36">
                 <path
-                  className="text-slate-800"
+                  style={{ color: 'var(--color-surface-high)' }}
                   strokeWidth="3.5"
                   stroke="currentColor"
                   fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
                 <path
-                  className="text-emerald-400 transition-all duration-1000 ease-out"
+                  style={{ color: '#059669', transition: 'stroke-dasharray 1s ease-out' }}
                   strokeDasharray={`${finalScore}, 100`}
                   strokeWidth="3.5"
                   strokeLinecap="round"
@@ -189,26 +217,27 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-emerald-400">{finalScore}%</span>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-tertiary)' }}>{finalScore}%</span>
               </div>
             </div>
             <div>
-              <span className="block text-[10px] font-bold uppercase tracking-wider text-emerald-400">Optimized</span>
-              <span className="text-xs font-bold text-white">Target Match</span>
+              <span style={{ display: 'block', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-tertiary)' }}>Optimized</span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-on-surface)' }}>Target Match</span>
             </div>
           </div>
         </div>
 
         {/* Global Action Bar */}
-        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+        <div className="w-full sm:w-auto" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
             id="btn-copy-resume"
             onClick={handleCopy}
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+            className="btn btn-primary btn-md w-full sm:w-auto"
+            style={{ gap: '6px' }}
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+            {copied ? <Check style={{ width: '14px', height: '14px' }} /> : <Copy style={{ width: '14px', height: '14px' }} />}
             <span>{copied ? 'Copied to Clipboard!' : 'Copy Resume'}</span>
           </button>
 
@@ -216,9 +245,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
             type="button"
             id="btn-download-resume"
             onClick={handleDownload}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all active:scale-95"
+            className="btn btn-ghost btn-md w-full sm:w-auto"
+            style={{ gap: '6px' }}
           >
-            <Download className="w-4 h-4 text-slate-400" />
+            <Download style={{ width: '14px', height: '14px' }} />
             <span>Download .MD</span>
           </button>
 
@@ -226,28 +256,35 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
             type="button"
             id="btn-print-resume"
             onClick={handlePrint}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all active:scale-95"
+            className="btn btn-ghost btn-md w-full sm:w-auto"
+            style={{ gap: '6px' }}
           >
-            <Printer className="w-4 h-4 text-slate-400" />
+            <Printer style={{ width: '14px', height: '14px' }} />
             <span>Print / PDF</span>
           </button>
         </div>
       </div>
 
-      {/* Tabs Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 mt-4">
-        <div className="flex items-center space-x-2">
+      {/* Tabs Header Bar */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: '1px solid var(--border-ghost)',
+          padding: '0 24px',
+          background: 'var(--color-surface-container)',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div className="tab-list">
           <button
             type="button"
             id="tab-btn-preview"
             onClick={() => setActiveTab('preview')}
-            className={`px-4 py-3 text-xs font-semibold border-b-2 transition-all flex items-center space-x-2 ${
-              activeTab === 'preview'
-                ? 'border-indigo-500 text-indigo-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
+            className={`tab-btn ${activeTab === 'preview' ? 'active' : ''}`}
           >
-            <FileText className="w-4 h-4" />
+            <FileText style={{ width: '15px', height: '15px' }} />
             <span>Optimized Resume</span>
           </button>
 
@@ -255,15 +292,20 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
             type="button"
             id="tab-btn-keywords"
             onClick={() => setActiveTab('keywords')}
-            className={`px-4 py-3 text-xs font-semibold border-b-2 transition-all flex items-center space-x-2 ${
-              activeTab === 'keywords'
-                ? 'border-indigo-500 text-indigo-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
+            className={`tab-btn ${activeTab === 'keywords' ? 'active' : ''}`}
           >
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Sparkles style={{ width: '15px', height: '15px', color: 'var(--color-tertiary)' }} />
             <span>ATS Keyword Breakdown</span>
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-indigo-500/20 text-indigo-300 font-bold">
+            <span
+              style={{
+                padding: '2px 6px',
+                borderRadius: '9999px',
+                fontSize: '10px',
+                fontWeight: 700,
+                background: 'rgba(37, 99, 235, 0.15)',
+                color: 'var(--color-primary-dim)',
+              }}
+            >
               {keyKeywordsMatched.length + missingKeywordsAdded.length}
             </span>
           </button>
@@ -272,35 +314,61 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
             type="button"
             id="tab-btn-tips"
             onClick={() => setActiveTab('tips')}
-            className={`px-4 py-3 text-xs font-semibold border-b-2 transition-all flex items-center space-x-2 ${
-              activeTab === 'tips'
-                ? 'border-indigo-500 text-indigo-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
+            className={`tab-btn ${activeTab === 'tips' ? 'active' : ''}`}
           >
-            <Lightbulb className="w-4 h-4 text-emerald-400" />
-            <span>Improvements & ATS Tips</span>
+            <Lightbulb style={{ width: '15px', height: '15px', color: 'var(--color-secondary)' }} />
+            <span>Improvements &amp; ATS Tips</span>
           </button>
         </div>
 
-        {/* Formatted vs Raw toggle when on preview tab */}
+        {/* View mode toggle (Formatted vs Raw) */}
         {activeTab === 'preview' && (
-          <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs my-2">
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'var(--color-canvas)',
+              padding: '2px',
+              borderRadius: '6px',
+              border: '1px solid var(--border-ghost)',
+              margin: '8px 0',
+            }}
+          >
             <button
               type="button"
               onClick={() => setViewMode('formatted')}
-              className={`px-2.5 py-1 rounded-md transition-all ${
-                viewMode === 'formatted' ? 'bg-slate-800 text-white font-medium' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              style={{
+                padding: '4px 10px',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 600,
+                fontFamily: 'var(--font-sans)',
+                border: 'none',
+                cursor: 'pointer',
+                background: viewMode === 'formatted' ? 'var(--color-surface-low)' : 'transparent',
+                color: viewMode === 'formatted' ? 'var(--color-on-surface)' : 'var(--color-on-surface-variant)',
+                boxShadow: viewMode === 'formatted' ? 'var(--shadow-card)' : 'none',
+                transition: 'all 150ms ease',
+              }}
             >
               Formatted
             </button>
             <button
               type="button"
               onClick={() => setViewMode('raw')}
-              className={`px-2.5 py-1 rounded-md transition-all ${
-                viewMode === 'raw' ? 'bg-slate-800 text-white font-medium' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              style={{
+                padding: '4px 10px',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 600,
+                fontFamily: 'var(--font-sans)',
+                border: 'none',
+                cursor: 'pointer',
+                background: viewMode === 'raw' ? 'var(--color-surface)' : 'transparent',
+                color: viewMode === 'raw' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                boxShadow: viewMode === 'raw' ? 'var(--shadow-1)' : 'none',
+                transition: 'all 150ms ease',
+              }}
             >
               Raw Markdown
             </button>
@@ -308,103 +376,141 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
         )}
       </div>
 
-      {/* Tab Contents */}
-      <div className="mt-6">
+      {/* Tab Body Content */}
+      <div style={{ padding: '24px' }}>
         {/* Tab 1: Optimized Resume */}
         {activeTab === 'preview' && (
           <div>
             {viewMode === 'formatted' ? (
-              <div className="bg-slate-950 p-6 sm:p-8 rounded-2xl border border-slate-800 text-slate-200 leading-relaxed max-h-[600px] overflow-y-auto">
-                <div className="prose prose-invert prose-slate max-w-none prose-headings:text-slate-100 prose-headings:font-bold prose-h1:text-2xl prose-h2:text-lg prose-h2:border-b prose-h2:border-slate-800 prose-h2:pb-2 prose-h2:mt-6 prose-a:text-indigo-400 prose-strong:text-indigo-300">
-                  <Markdown>{optimizedResume}</Markdown>
-                </div>
-              </div>
+              <ResumeDocumentView markdown={cleanedResume} />
             ) : (
-              <pre className="bg-slate-950 p-6 rounded-2xl border border-slate-800 text-indigo-200 font-mono text-xs overflow-x-auto max-h-[600px] whitespace-pre-wrap leading-relaxed">
-                {optimizedResume}
+              <pre
+                style={{
+                  background: 'var(--color-surface-low)',
+                  border: '1px solid var(--border-ghost)',
+                  borderRadius: '8px',
+                  padding: '24px',
+                  fontSize: '13px',
+                  fontFamily: 'monospace',
+                  color: 'var(--color-on-surface)',
+                  maxHeight: '680px',
+                  overflowY: 'auto',
+                  whiteSpace: 'pre-wrap',
+                  lineHeight: 1.6,
+                }}
+              >
+                {cleanedResume}
               </pre>
             )}
           </div>
         )}
 
-        {/* Tab 2: Keywords Analysis */}
+        {/* Tab 2: Keywords Breakdown */}
         {activeTab === 'keywords' && (
-          <div className="space-y-6">
-            {/* Newly Injected Missing Keywords */}
-            <div className="bg-slate-950/80 p-5 rounded-2xl border border-indigo-500/20">
-              <div className="flex items-center space-x-2 mb-3">
-                <PlusCircle className="w-5 h-5 text-indigo-400" />
-                <h4 className="text-sm font-bold text-slate-100">Critical Keywords Added to Resume</h4>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Added Keywords */}
+            <div
+              style={{
+                background: 'var(--color-surface-low)',
+                border: '1px solid var(--border-ghost)',
+                borderRadius: '8px',
+                padding: '20px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <PlusCircle style={{ width: '16px', height: '16px', color: 'var(--color-primary-dim)' }} />
+                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-on-surface)' }}>
+                  Critical Keywords Added to Resume
+                </h4>
               </div>
-              <p className="text-xs text-slate-400 mb-4">
-                These keywords were prominent in the job description but missing in your original draft. They have been seamlessly woven into your bullet points and skills section:
+              <p style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', marginBottom: '14px' }}>
+                These keywords were prominent in the job description but missing in your original draft. They have been seamlessly woven into your experience bullets:
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {missingKeywordsAdded.length > 0 ? (
                   missingKeywordsAdded.map((kw, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 flex items-center space-x-1.5"
-                    >
-                      <Sparkles className="w-3 h-3 text-indigo-400" />
+                    <span key={i} className="chip chip-primary">
+                      <Sparkles style={{ width: '11px', height: '11px', color: '#2563eb' }} />
                       <span>{kw}</span>
                     </span>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-500 italic">All key JD keywords were already present in your original resume!</p>
+                  <p style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', fontStyle: 'italic' }}>
+                    All key JD keywords were already present in your original resume!
+                  </p>
                 )}
               </div>
             </div>
 
-            {/* Existing Matched Keywords */}
-            <div className="bg-slate-950/80 p-5 rounded-2xl border border-emerald-500/20">
-              <div className="flex items-center space-x-2 mb-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-sm font-bold text-slate-100">Existing Matched Competencies</h4>
+            {/* Matched Keywords */}
+            <div
+              style={{
+                background: 'var(--color-surface-low)',
+                border: '1px solid var(--border-ghost)',
+                borderRadius: '8px',
+                padding: '20px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <CheckCircle2 style={{ width: '16px', height: '16px', color: 'var(--color-tertiary)' }} />
+                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-on-surface)' }}>
+                  Existing Matched Competencies
+                </h4>
               </div>
-              <p className="text-xs text-slate-400 mb-4">
-                Keywords and technical requirements already identified in your background that were preserved and highlighted:
+              <p style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', marginBottom: '14px' }}>
+                Keywords and technical requirements already identified in your background that were preserved and emphasized:
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {keyKeywordsMatched.map((kw, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 rounded-xl text-xs font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 flex items-center space-x-1"
-                  >
-                    <Check className="w-3 h-3 text-emerald-400" />
+                  <span key={i} className="chip chip-success">
+                    <Check style={{ width: '11px', height: '11px' }} />
                     <span>{kw}</span>
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* Strengths & Gaps Grid */}
+            {/* Profile Strengths & Gaps */}
             {rawAnalysis && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                  <h5 className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center space-x-1">
-                    <Award className="w-4 h-4" />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                <div
+                  style={{
+                    background: 'var(--color-surface-low)',
+                    border: '1px solid var(--border-ghost)',
+                    borderRadius: '8px',
+                    padding: '16px 20px',
+                  }}
+                >
+                  <h5 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Award style={{ width: '14px', height: '14px' }} />
                     <span>Core Profile Strengths</span>
                   </h5>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                     {rawAnalysis.strengths?.map((str, i) => (
-                      <li key={i} className="flex items-start space-x-2">
-                        <ChevronRight className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <li key={i} style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', padding: '6px 0', borderBottom: i < (rawAnalysis.strengths?.length || 0) - 1 ? '1px solid var(--border-ghost)' : 'none', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                        <ChevronRight style={{ width: '14px', height: '14px', color: 'var(--color-tertiary)', flexShrink: 0, marginTop: '2px' }} />
                         <span>{str}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                  <h5 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center space-x-1">
-                    <AlertTriangle className="w-4 h-4" />
+                <div
+                  style={{
+                    background: 'var(--color-surface-low)',
+                    border: '1px solid var(--border-ghost)',
+                    borderRadius: '8px',
+                    padding: '16px 20px',
+                  }}
+                >
+                  <h5 style={{ fontSize: '12px', fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <AlertTriangle style={{ width: '14px', height: '14px' }} />
                     <span>Skill Gaps / Hiring Considerations</span>
                   </h5>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                     {rawAnalysis.gapsIdentified?.map((gap, i) => (
-                      <li key={i} className="flex items-start space-x-2">
-                        <ChevronRight className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                      <li key={i} style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', padding: '6px 0', borderBottom: i < (rawAnalysis.gapsIdentified?.length || 0) - 1 ? '1px solid var(--border-ghost)' : 'none', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                        <ChevronRight style={{ width: '14px', height: '14px', color: '#fbbf24', flexShrink: 0, marginTop: '2px' }} />
                         <span>{gap}</span>
                       </li>
                     ))}
@@ -417,35 +523,90 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
 
         {/* Tab 3: Improvements & Tips */}
         {activeTab === 'tips' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Key Improvements Made */}
-            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800">
-              <h4 className="text-sm font-bold text-slate-100 mb-3 flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-indigo-400" />
-                <span>Major Bullet Point & Impact Enhancements</span>
+            <div
+              style={{
+                background: 'var(--color-surface-low)',
+                border: '1px solid var(--border-ghost)',
+                borderRadius: '8px',
+                padding: '20px',
+              }}
+            >
+              <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-on-surface)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Sparkles style={{ width: '16px', height: '16px', color: 'var(--color-primary-dim)' }} />
+                <span>Major Bullet Point &amp; Impact Enhancements</span>
               </h4>
-              <ul className="space-y-2.5 text-xs text-slate-300">
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {improvementsSummary.map((imp, i) => (
-                  <li key={i} className="flex items-start space-x-2 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                    <span className="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                  <li
+                    key={i}
+                    style={{
+                      background: 'var(--color-surface-container)',
+                      border: '1px solid var(--border-ghost)',
+                      borderRadius: '6px',
+                      padding: '12px 16px',
+                      fontSize: '13px',
+                      color: 'var(--color-on-surface-variant)',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '12px',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '22px',
+                        height: '22px',
+                        borderRadius: '50%',
+                        background: 'rgba(37, 99, 235, 0.15)',
+                        color: 'var(--color-primary-dim)',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        marginTop: '1px',
+                      }}
+                    >
                       {i + 1}
                     </span>
-                    <span className="leading-relaxed">{imp}</span>
+                    <span>{imp}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* ATS Formatting Guidelines */}
-            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800">
-              <h4 className="text-sm font-bold text-slate-100 mb-3 flex items-center space-x-2">
-                <Lightbulb className="w-4 h-4 text-amber-400" />
+            <div
+              style={{
+                background: 'var(--color-surface-low)',
+                border: '1px solid var(--border-ghost)',
+                borderRadius: '8px',
+                padding: '20px',
+              }}
+            >
+              <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-on-surface)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Lightbulb style={{ width: '16px', height: '16px', color: '#fbbf24' }} />
                 <span>Actionable ATS Submission Guidelines</span>
               </h4>
-              <ul className="space-y-2 text-xs text-slate-300">
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {atsFormattingTips.map((tip, i) => (
-                  <li key={i} className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-on-surface-variant)',
+                      padding: '8px 0',
+                      borderBottom: i < atsFormattingTips.length - 1 ? '1px solid var(--border-ghost)' : 'none',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    <CheckCircle2 style={{ width: '15px', height: '15px', color: 'var(--color-tertiary)', flexShrink: 0, marginTop: '2px' }} />
                     <span>{tip}</span>
                   </li>
                 ))}

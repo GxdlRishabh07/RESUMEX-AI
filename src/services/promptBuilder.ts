@@ -84,13 +84,40 @@ STRICT OPTIMIZATION RULES:
 1. FACTUAL INTEGRITY: NEVER fabricate employment history, job titles, companies, degrees, or non-existent metrics. Work within the true realm of what the candidate has achieved, but reframe and amplify real accomplishments using strong STAR (Situation, Task, Action, Result) impact statements.
 2. ATS KEYWORD ENHANCEMENT: Extract high-value technical skills, core competencies, tools, methodologies, and action verbs from the Job Description and seamlessly integrate them into the resume bullet points and Skills section.
 3. BULLET REWRITING: Transform weak bullet points (e.g., "Responsible for managing a team") into high-impact, metrics-driven statements starting with powerful past-tense action verbs (e.g., "Spearheaded an agile team of 6 engineers, accelerating feature delivery speed by 35%").
-4. ATS FORMATTING: Generate a clean, structured Markdown resume using standardized header sections:
-   - Full Name & Contact Info Placeholder
-   - Professional Summary (3-4 punchy lines incorporating top target keywords)
-   - Core Competencies / Technical Skills (Categorized neatly, e.g., Languages, Frameworks, Cloud & DevOps, Tools)
-   - Professional Experience (Company, Title, Dates, 3-5 high-impact bullet points per role)
-   - Projects (if applicable)
-   - Education & Certifications
+4. ATS RESUME LAYOUT & FORMATTING (CRITICAL):
+   The "optimizedResume" field MUST be formatted as a clean, executive-level resume document using multi-line Markdown with distinct sections separated by blank lines. NEVER output text as an unbroken single paragraph.
+   Structure it with this exact standard resume layout:
+
+   # [CANDIDATE FULL NAME]
+   [Phone Number] • [Email Address] • [Location / City, Country] • [LinkedIn URL] • [Portfolio / GitHub]
+
+   ## PROFESSIONAL SUMMARY
+   [3-4 sentences synthesizing core domain qualifications and key matched keywords]
+
+   ## TECHNICAL SKILLS
+   - **Programming Languages:** [Skills categorized clearly]
+   - **Frameworks & Web Technologies:** [Frameworks]
+   - **Databases & Cloud:** [Databases, Tools]
+   - **Core Competencies:** [APIs, Architecture, Methodologies]
+
+   ## PROFESSIONAL EXPERIENCE
+   ### [Job Title] | [Company Name]
+   *[Start Month Year] – [End Month Year or Present] | [Location or Remote]*
+   - [Action Verb] [Quantified accomplishment using STAR method and target keywords]
+   - [Action Verb] [System enhancement, metric-driven result, or feature delivered]
+   - [Action Verb] [Technical collaboration or tooling integration]
+
+   ## PROJECTS
+   ### [Project Name] — [Key Technologies Used]
+   *[Role / Link] | [Dates]*
+   - [High-impact bullet point detailing scope and measurable results]
+   - [Technical highlights and architecture achievements]
+
+   ## EDUCATION
+   ### [Degree, Major] — [University / Institution Name]
+   *[Graduation Year] | [Location]*
+
+   Ensure each bullet point is on its own line starting with '- ' and each major section header starts with '## '.
 5. QUANTIFY ACHIEVEMENTS: Wherever reasonable, introduce standard metrics benchmarks or placeholder metrics [e.g. "by X%", "saving Y hours/week"] if exact figures were not provided in original resume, guiding the user to fill in exact numbers.
 
 OUTPUT FORMAT REQUIREMENTS:

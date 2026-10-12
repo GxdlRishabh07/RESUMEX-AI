@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar.js';
 import { HeroSection } from './components/HeroSection.js';
 import { ResumeInput } from './components/ResumeInput.js';
@@ -10,8 +11,14 @@ import { ErrorAlert } from './components/ErrorAlert.js';
 import { Footer } from './components/Footer.js';
 import { SAMPLE_DATASETS } from './data/samples.js';
 import { OptimizeResumeResponse, AtsAnalysisResponse, ApiErrorResponse } from './types.js';
+import { supabase, ResumeAnalysis } from './lib/supabase.js';
+import { useAuth } from './context/AuthContext.js';
+import { saveAnalysis } from './services/historyService.js';
+import { updateRateLimitFromHeaders } from './services/rateLimitService.js';
 
 export default function App() {
+  const { user } = useAuth();
+  const location = useLocation();
   const [resumeText, setResumeText] = useState('');
   const [jdText, setJdText] = useState('');
   const [experienceLevel, setExperienceLevel] = useState<'Entry-Level' | 'Mid-Level' | 'Senior' | 'Executive'>('Mid-Level');
@@ -31,6 +38,45 @@ export default function App() {
     setInitialScoreData(null);
     setResult(null);
   };
+
+  // Load analysis from navigation state if coming from Dashboard
+  useEffect(() => {
+    const analysis = (location.state as any)?.analysis as ResumeAnalysis | undefined;
+    if (analysis) {
+      if (analysis.resume_text) setResumeText(analysis.resume_text);
+      if (analysis.job_description) setJdText(analysis.job_description);
+      if (analysis.experience_level) {
+        setExperienceLevel(analysis.experience_level as any);
+      }
+      if (analysis.initial_score !== null) {
+        setInitialScoreData({
+          success: true,
+          initialScore: analysis.initial_score,
+          matchedKeywords: analysis.matched_keywords || [],
+          missingKeywords: analysis.missing_keywords || [],
+          criticalGaps: analysis.critical_gaps || [],
+          formattingIssues: analysis.formatting_issues || [],
+          recommendations: analysis.recommendations || [],
+          summary: analysis.summary || '',
+        });
+      }
+      if (analysis.optimized_resume) {
+        setResult({
+          success: true,
+          initialScore: analysis.initial_score || 0,
+          optimizedScore: analysis.optimized_score || 0,
+          matchScore: analysis.optimized_score || 0,
+          scoreBoost: analysis.score_boost || 0,
+          keyKeywordsMatched: analysis.matched_keywords || [],
+          missingKeywordsAdded: analysis.missing_keywords || [],
+          improvementsSummary: analysis.improvements_summary || [],
+          atsFormattingTips: analysis.ats_formatting_tips || [],
+          optimizedResume: analysis.optimized_resume,
+          rawAnalysis: analysis.raw_analysis || undefined,
+        });
+      }
+    }
+  }, [location.state]);
 
   // Handler: Calculate Initial ATS Score Audit
   const handleAnalyzeScore = async () => {
@@ -58,6 +104,8 @@ export default function App() {
         }),
       });
 
+      updateRateLimitFromHeaders(response.headers);
+
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -65,6 +113,15 @@ export default function App() {
       }
 
       setInitialScoreData(data as AtsAnalysisResponse);
+
+      // Save to hybrid history (localStorage + Supabase)
+      saveAnalysis({
+        type: 'score_only',
+        resumeText,
+        jobDescription: jdText,
+        experienceLevel,
+        scoreData: data as AtsAnalysisResponse,
+      }, user);
 
       // Smooth scroll to initial score card
       setTimeout(() => {
@@ -114,6 +171,8 @@ export default function App() {
         }),
       });
 
+      updateRateLimitFromHeaders(response.headers);
+
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -121,6 +180,16 @@ export default function App() {
       }
 
       setResult(data as OptimizeResumeResponse);
+
+      // Save to hybrid history (localStorage + Supabase)
+      saveAnalysis({
+        type: 'full',
+        resumeText,
+        jobDescription: jdText,
+        experienceLevel,
+        scoreData: initialScoreData,
+        optimizeData: data as OptimizeResumeResponse,
+      }, user);
 
       // Smooth scroll to result
       setTimeout(() => {
@@ -159,12 +228,29 @@ export default function App() {
   }, [resumeText, jdText, isLoading]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white flex flex-col">
-      {/* Top Navbar */}
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        backgroundColor: 'var(--color-canvas)',
+        color: 'var(--color-text-primary)',
+        fontFamily: 'var(--font-sans)',
+        position: 'relative',
+        zIndex: 1,
+      }}
+    >
+      {/* Top Navbar (fixed) */}
       <Navbar onLoadSample={() => handleLoadSample(0)} />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Container — pt-16 to clear fixed navbar */}
+      <main
+        className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8"
+        style={{
+          maxWidth: '1400px',
+          paddingTop: '64px',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
         {/* Hero Banner */}
         <HeroSection />
 
@@ -176,12 +262,17 @@ export default function App() {
         />
 
         {/* Input Workstation Section */}
-        <div id="workstation-grid" className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 items-stretch">
+        <div
+          id="workstation-grid"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+          style={{ marginTop: '8px' }}
+        >
           {/* Resume Input Panel */}
           <ResumeInput
             value={resumeText}
             onChange={setResumeText}
             disabled={isLoading}
+            onLoadSample={() => handleLoadSample(0)}
           />
 
           {/* Job Description Input Panel */}
@@ -195,7 +286,7 @@ export default function App() {
           />
         </div>
 
-        {/* Primary Action Buttons: Check ATS Score & Full Optimization */}
+        {/* Primary Action Buttons */}
         <OptimizeButton
           onAnalyzeScore={handleAnalyzeScore}
           onOptimize={handleOptimize}
@@ -203,6 +294,39 @@ export default function App() {
           isOptimizing={isOptimizing}
           disabled={!resumeText.trim() || !jdText.trim()}
         />
+
+        {/* Guest Mode History Notice */}
+        {!user && (initialScoreData || result) && (
+          <div
+            id="guest-mode-save-prompt"
+            style={{
+              marginTop: '16px',
+              padding: '12px 18px',
+              borderRadius: '10px',
+              background: 'rgba(234, 179, 8, 0.08)',
+              border: '1px solid rgba(234, 179, 8, 0.25)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span className="material-symbols-outlined" style={{ color: '#eab308', fontSize: '20px' }}>info</span>
+              <span style={{ fontSize: '13px', color: 'var(--color-on-surface)' }}>
+                <strong>Guest Mode:</strong> Past analyses are not stored in guest mode. <strong>Login to see your analysis history</strong> and save your optimizations.
+              </span>
+            </div>
+            <Link
+              to="/login"
+              className="btn btn-secondary btn-sm"
+              style={{ textDecoration: 'none', whiteSpace: 'nowrap', fontSize: '12px', padding: '5px 12px' }}
+            >
+              Sign In to Save
+            </Link>
+          </div>
+        )}
 
         {/* Pre-Optimization Initial ATS Score Card */}
         {initialScoreData && (

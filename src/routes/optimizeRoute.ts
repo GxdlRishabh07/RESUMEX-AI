@@ -3,6 +3,8 @@
  */
 
 import { Router, Request, Response } from 'express';
+import WordExtractor from 'word-extractor';
+import mammoth from 'mammoth';
 import { optimizeResumeWithGemini, analyzeAtsScoreWithGemini, testGeminiConnection } from '../services/geminiService.js';
 import { OptimizeResumeRequest, ApiErrorResponse } from '../types.js';
 
@@ -61,6 +63,16 @@ apiRouter.post('/analyze-score', async (req: Request, res: Response) => {
         error: 'Invalid Input Length',
         details: 'Minimum 30 characters required for both resume and job description.',
         code: 'INPUT_TOO_SHORT',
+      });
+    }
+
+    // Maximum length protection
+    if (resume.length > 15000 || jobDescription.length > 15000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Payload Too Large',
+        details: 'Inputs exceed the maximum allowed length of 15,000 characters.',
+        code: 'INPUT_TOO_LARGE',
       });
     }
 
@@ -135,11 +147,11 @@ apiRouter.post('/optimize-resume', async (req: Request, res: Response) => {
     }
 
     // 3. Validation: Maximum length protection
-    if (resume.length > 50000 || jobDescription.length > 50000) {
+    if (resume.length > 15000 || jobDescription.length > 15000) {
       const errRes: ApiErrorResponse = {
         success: false,
         error: 'Payload Too Large',
-        details: 'Inputs exceed the maximum allowed length of 50,000 characters.',
+        details: 'Inputs exceed the maximum allowed length of 15,000 characters.',
         code: 'INPUT_TOO_LARGE',
       };
       return res.status(400).json(errRes);
@@ -187,3 +199,84 @@ apiRouter.post('/optimize-resume', async (req: Request, res: Response) => {
     });
   }
 });
+
+/**
+ * POST /api/parse-document
+ * Server-side extraction fallback for .doc (legacy binary), .docx, and other document formats
+ */
+apiRouter.post('/parse-document', async (req: Request, res: Response) => {
+  try {
+    const { fileName, fileBase64 } = req.body;
+
+    if (!fileBase64 || typeof fileBase64 !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing file payload',
+        details: 'No base64 file data provided.',
+      });
+    }
+
+    const buffer = Buffer.from(fileBase64, 'base64');
+    const ext = (fileName || '').toLowerCase().split('.').pop() || '';
+
+    let extractedText = '';
+
+    if (ext === 'doc' || ext === 'docx') {
+      try {
+        const extractor = new WordExtractor();
+        const extracted = await extractor.extract(buffer);
+        const headers = extracted.getHeaders({ includeHeaders: true }) || '';
+        const body = extracted.getBody() || '';
+        const footers = extracted.getFooters({ includeFooters: true }) || '';
+        extractedText = [headers, body, footers].filter(Boolean).join('\n\n').trim();
+      } catch (wordErr) {
+        // Fallback to mammoth for docx
+        const mammothResult = await mammoth.extractRawText({ buffer });
+        extractedText = (mammothResult.value || '').trim();
+      }
+    } else if (ext === 'pdf') {
+      try {
+        const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+        const pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buffer), useSystemFonts: true }).promise;
+        const pageTexts: string[] = [];
+        for (let i = 1; i <= pdfDoc.numPages; i++) {
+          const page = await pdfDoc.getPage(i);
+          const content = await page.getTextContent();
+          const pageText = content.items
+            .map((item: any) => ('str' in item ? item.str : ''))
+            .join(' ');
+          if (pageText.trim()) pageTexts.push(pageText.trim());
+        }
+        extractedText = pageTexts.join('\n\n');
+      } catch (pdfErr: any) {
+        console.error('[API] Server PDF parse error:', pdfErr);
+        throw new Error('Failed to parse PDF document on server');
+      }
+    } else {
+      // Plain text or fallback
+      extractedText = buffer.toString('utf-8');
+    }
+
+    if (!extractedText.trim()) {
+      return res.status(422).json({
+        success: false,
+        error: 'Empty Document',
+        details: 'Could not extract any readable text from this file.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      text: extractedText.trim(),
+      fileName: fileName || 'document',
+    });
+  } catch (error: any) {
+    console.error('[API Error] Document parsing failed:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Parse Error',
+      details: error?.message || 'Failed to process document on server.',
+    });
+  }
+});
+

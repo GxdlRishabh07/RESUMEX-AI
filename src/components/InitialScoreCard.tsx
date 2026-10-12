@@ -33,114 +33,173 @@ export const InitialScoreCard: React.FC<InitialScoreCardProps> = ({
     summary,
   } = data;
 
-  const getScoreBadge = (score: number) => {
-    if (score >= 75) return { color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', label: 'Good Initial Match' };
-    if (score >= 50) return { color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', label: 'Moderate Match (Gaps Found)' };
-    return { color: 'text-rose-400 border-rose-500/30 bg-rose-500/10', label: 'Low ATS Match (Requires Optimization)' };
+  const getScoreConfig = (score: number) => {
+    if (score >= 75) return { color: 'var(--color-tertiary)', bg: 'rgba(76, 215, 246, 0.08)', border: 'rgba(76, 215, 246, 0.2)', label: 'Good Initial Match', trackFill: 'progress-fill-success' };
+    if (score >= 50) return { color: '#fbbf24', bg: 'rgba(245, 158, 11, 0.08)', border: 'rgba(245, 158, 11, 0.2)', label: 'Moderate Match — Gaps Found', trackFill: 'progress-fill-warning' };
+    return { color: 'var(--color-error)', bg: 'rgba(255, 180, 171, 0.08)', border: 'rgba(255, 180, 171, 0.2)', label: 'Low ATS Match — Optimization Required', trackFill: '' };
   };
 
-  const badge = getScoreBadge(initialScore);
+  const cfg = getScoreConfig(initialScore);
 
   return (
-    <div id="card-initial-score-container" className="bg-slate-900/95 rounded-3xl border border-indigo-500/30 p-6 shadow-2xl mt-6 animate-fadeIn">
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
-        <div className="flex items-center space-x-5 w-full md:w-auto">
-          {/* Initial Score Circular Gauge */}
-          <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+    <div
+      id="card-initial-score-container"
+      className="animate-fade-in-up card"
+      style={{
+        marginTop: '24px',
+      }}
+    >
+      {/* Card Header */}
+      <div
+        className="card-header"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+        }}
+      >
+        {/* Score + Label */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* Circular Score */}
+          <div style={{ position: 'relative', width: '72px', height: '72px', flexShrink: 0 }}>
+            <svg style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }} viewBox="0 0 36 36">
               <path
-                className="text-slate-800"
-                strokeWidth="3.5"
+                style={{ color: 'var(--color-surface-high-2, #262a34)' }}
+                strokeWidth="3"
                 stroke="currentColor"
                 fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
               <path
-                className="transition-all duration-1000 ease-out text-amber-400"
+                style={{ color: cfg.color, transition: 'stroke-dasharray 1s ease-out' }}
                 strokeDasharray={`${initialScore}, 100`}
-                strokeWidth="3.5"
+                strokeWidth="3"
                 strokeLinecap="round"
                 stroke="currentColor"
                 fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-white">{initialScore}%</span>
-              <span className="text-[9px] font-semibold tracking-wider text-slate-400 uppercase">Current ATS</span>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontSize: '20px', fontWeight: 700, color: cfg.color, lineHeight: 1 }}>{initialScore}%</span>
+              <span style={{ fontSize: '9px', fontWeight: 600, color: 'var(--color-text-tertiary)', letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: '2px' }}>ATS Score</span>
             </div>
           </div>
 
           <div>
-            <div className="flex items-center space-x-2">
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}>
-                {badge.label}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+              <span
+                style={{
+                  padding: '3px 10px',
+                  borderRadius: '9999px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  background: cfg.bg,
+                  color: cfg.color,
+                  border: `1px solid ${cfg.border}`,
+                }}
+              >
+                {cfg.label}
               </span>
-              <span className="text-xs text-slate-400">Pre-Optimization Baseline</span>
+              <span style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>Pre-Optimization Baseline</span>
             </div>
-            <h3 className="text-xl font-bold text-white mt-1">Initial ATS Match Score</h3>
-            <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">{summary}</p>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-on-surface)', marginBottom: '4px', fontFamily: 'var(--font-display)' }}>
+              Initial ATS Match Score
+            </h3>
+            <p style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', lineHeight: 1.5, maxWidth: '540px' }}>{summary}</p>
           </div>
         </div>
 
-        {/* CTA to Full Optimization */}
-        <div className="w-full md:w-auto shrink-0 flex justify-end">
-          <button
-            type="button"
-            id="btn-proceed-optimize-from-score"
-            onClick={onProceedToOptimize}
-            disabled={isOptimizing}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-sm bg-gradient-to-r from-indigo-600 via-blue-600 to-emerald-500 hover:shadow-lg hover:shadow-indigo-500/25 text-white transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center space-x-2 border border-indigo-400/30"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>Apply AI Optimization Now</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
+        {/* CTA */}
+        <button
+          type="button"
+          id="btn-proceed-optimize-from-score"
+          onClick={onProceedToOptimize}
+          disabled={isOptimizing}
+          className="btn btn-primary btn-lg"
+          style={{ flexShrink: 0, gap: '8px' }}
+        >
+          <Sparkles style={{ width: '15px', height: '15px', color: '#fbbf24' }} />
+          <span>Apply AI Optimization Now</span>
+          <ArrowRight style={{ width: '15px', height: '15px' }} />
+        </button>
       </div>
 
       {/* Grid Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
         {/* Keywords Analysis */}
-        <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-          <h4 className="text-sm font-bold text-slate-200 flex items-center space-x-2">
-            <ListFilter className="w-4 h-4 text-indigo-400" />
+        <div
+          style={{
+            background: 'var(--color-surface-low)',
+            border: '1px solid var(--border-ghost)',
+            borderRadius: '8px',
+            padding: '20px',
+          }}
+        >
+          <h4
+            style={{
+              fontSize: '13px',
+              fontWeight: 700,
+              color: 'var(--color-on-surface)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              marginBottom: '16px',
+              paddingBottom: '12px',
+              borderBottom: '1px solid var(--border-ghost)',
+            }}
+          >
+            <ListFilter style={{ width: '14px', height: '14px', color: 'var(--color-primary-dim)' }} />
             <span>Keyword Coverage Audit</span>
           </h4>
 
           {/* Missing Keywords */}
-          <div>
-            <span className="text-xs font-semibold text-rose-400 flex items-center space-x-1.5 mb-2">
-              <XCircle className="w-3.5 h-3.5" />
-              <span>Missing High-Priority Keywords ({missingKeywords.length})</span>
+          <div style={{ marginBottom: '16px' }}>
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'var(--color-error)',
+                marginBottom: '8px',
+              }}
+            >
+              <XCircle style={{ width: '13px', height: '13px' }} />
+              Missing High-Priority Keywords ({missingKeywords.length})
             </span>
-            <div className="flex flex-wrap gap-1.5">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {missingKeywords.map((kw, i) => (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 rounded-lg text-xs font-medium bg-rose-500/10 text-rose-300 border border-rose-500/20"
-                >
-                  {kw}
-                </span>
+                <span key={i} className="chip chip-error">{kw}</span>
               ))}
             </div>
           </div>
 
           {/* Matched Keywords */}
           <div>
-            <span className="text-xs font-semibold text-emerald-400 flex items-center space-x-1.5 mb-2">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Currently Matched Keywords ({matchedKeywords.length})</span>
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'var(--color-tertiary)',
+                marginBottom: '8px',
+              }}
+            >
+              <CheckCircle2 style={{ width: '13px', height: '13px' }} />
+              Currently Matched ({matchedKeywords.length})
             </span>
-            <div className="flex flex-wrap gap-1.5">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {matchedKeywords.map((kw, i) => (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 flex items-center space-x-1"
-                >
-                  <Check className="w-3 h-3 text-emerald-400" />
-                  <span>{kw}</span>
+                <span key={i} className="chip chip-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                  <Check style={{ width: '10px', height: '10px' }} />
+                  {kw}
                 </span>
               ))}
             </div>
@@ -148,21 +207,61 @@ export const InitialScoreCard: React.FC<InitialScoreCardProps> = ({
         </div>
 
         {/* Gaps & Bullet Weaknesses */}
-        <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-          <h4 className="text-sm font-bold text-slate-200 flex items-center space-x-2">
-            <FileSearch className="w-4 h-4 text-amber-400" />
-            <span>Critical Gaps & Formatting Weaknesses</span>
+        <div
+          style={{
+            background: 'var(--color-surface-low)',
+            border: '1px solid var(--border-ghost)',
+            borderRadius: '8px',
+            padding: '20px',
+          }}
+        >
+          <h4
+            style={{
+              fontSize: '13px',
+              fontWeight: 700,
+              color: 'var(--color-on-surface)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              marginBottom: '16px',
+              paddingBottom: '12px',
+              borderBottom: '1px solid var(--border-ghost)',
+            }}
+          >
+            <FileSearch style={{ width: '14px', height: '14px', color: '#fbbf24' }} />
+            <span>Critical Gaps &amp; Formatting Weaknesses</span>
           </h4>
 
           {criticalGaps.length > 0 && (
-            <div>
-              <span className="text-xs font-semibold text-amber-400 flex items-center space-x-1.5 mb-1.5">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Identified Qualifications Gaps</span>
+            <div style={{ marginBottom: '16px' }}>
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#b45309',
+                  marginBottom: '8px',
+                }}
+              >
+                <AlertTriangle style={{ width: '13px', height: '13px' }} />
+                Qualification Gaps
               </span>
-              <ul className="space-y-1 text-xs text-slate-300 pl-4 list-disc">
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {criticalGaps.map((gap, i) => (
-                  <li key={i}>{gap}</li>
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-on-surface-variant)',
+                      padding: '6px 0',
+                      borderBottom: i < criticalGaps.length - 1 ? '1px solid var(--border-ghost)' : 'none',
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {gap}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -170,13 +269,34 @@ export const InitialScoreCard: React.FC<InitialScoreCardProps> = ({
 
           {formattingIssues.length > 0 && (
             <div>
-              <span className="text-xs font-semibold text-slate-400 flex items-center space-x-1.5 mb-1.5">
-                <Gauge className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Formatting & Structure Issues</span>
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'var(--color-text-secondary)',
+                  marginBottom: '8px',
+                }}
+              >
+                <Gauge style={{ width: '13px', height: '13px', color: 'var(--color-primary-dim)' }} />
+                Formatting &amp; Structure Issues
               </span>
-              <ul className="space-y-1 text-xs text-slate-300 pl-4 list-disc">
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {formattingIssues.map((issue, i) => (
-                  <li key={i}>{issue}</li>
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-on-surface-variant)',
+                      padding: '6px 0',
+                      borderBottom: i < formattingIssues.length - 1 ? '1px solid var(--border-ghost)' : 'none',
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {issue}
+                  </li>
                 ))}
               </ul>
             </div>

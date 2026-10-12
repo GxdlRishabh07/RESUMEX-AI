@@ -1,0 +1,17 @@
+{
+  "name": "ResumeAI Pro — ATS Resume Optimizer",
+  "short_name": "ResumeAI",
+  "description": "Transform your resume with AI-powered ATS optimization. Match keywords, boost your score, and land more interviews with ResumeAI Pro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f9fb",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

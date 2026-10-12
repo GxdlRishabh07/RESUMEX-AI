@@ -6,3 +6,19 @@ coverage/
 *.log
 .env*
 !.env.example
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Screenshots & snapshots
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.yaml
+
+# Local tooling & design assets
+.claude/
+.agents/
+New design/
+

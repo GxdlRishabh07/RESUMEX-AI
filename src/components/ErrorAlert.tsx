@@ -1,5 +1,4 @@
 import React from 'react';
-import { AlertCircle, RefreshCw, X } from 'lucide-react';
 import { ApiErrorResponse } from '../types.js';
 
 interface ErrorAlertProps {
@@ -12,39 +11,119 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss, onRetr
   if (!error) return null;
 
   return (
-    <div id="alert-error-container" className="my-6 p-4 rounded-2xl bg-rose-950/80 border border-rose-500/40 text-rose-200 shadow-xl flex items-start justify-between space-x-4 animate-shake">
-      <div className="flex items-start space-x-3">
-        <div className="p-2 bg-rose-500/20 rounded-xl text-rose-400 shrink-0">
-          <AlertCircle className="w-5 h-5" />
+    <div
+      id="alert-error-container"
+      className="animate-fade-in-up"
+      style={{
+        margin: '16px 0',
+        padding: '16px',
+        borderRadius: '8px',
+        background: 'rgba(147, 0, 10, 0.15)',
+        border: '1px solid rgba(255, 180, 171, 0.2)',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        gap: '16px',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+        <div
+          style={{
+            padding: '8px',
+            background: 'rgba(255, 180, 171, 0.1)',
+            borderRadius: '6px',
+            color: 'var(--color-error)',
+            flexShrink: 0,
+          }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+            error
+          </span>
         </div>
         <div>
-          <h4 className="text-sm font-bold text-rose-100">{error.error || 'Optimization Error'}</h4>
-          <p className="text-xs text-rose-300 mt-1 leading-relaxed">{error.details}</p>
+          <h4
+            style={{
+              fontSize: '14px',
+              fontWeight: 700,
+              color: 'var(--color-error)',
+              marginBottom: '4px',
+              fontFamily: 'var(--font-sans)',
+            }}
+          >
+            {error.error || 'Optimization Error'}
+          </h4>
+          <p
+            style={{
+              fontSize: '13px',
+              color: 'rgba(255, 180, 171, 0.85)',
+              lineHeight: 1.5,
+              fontFamily: 'var(--font-sans)',
+            }}
+          >
+            {error.details}
+          </p>
           {error.code && (
-            <span className="inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-mono bg-rose-900/60 border border-rose-700/50 text-rose-400">
+            <span
+              style={{
+                display: 'inline-block',
+                marginTop: '8px',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                fontFamily: 'monospace',
+                background: 'rgba(255, 180, 171, 0.08)',
+                border: '1px solid rgba(255, 180, 171, 0.15)',
+                color: 'var(--color-error)',
+              }}
+            >
               Code: {error.code}
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 shrink-0">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
         {onRetry && (
           <button
             type="button"
             onClick={onRetry}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-800 hover:bg-rose-700 text-rose-100 flex items-center space-x-1 transition-colors"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '6px 12px',
+              background: 'transparent',
+              border: '1px solid rgba(255, 180, 171, 0.3)',
+              borderRadius: '6px',
+              color: 'var(--color-error)',
+              fontSize: '12px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              fontFamily: 'var(--font-sans)',
+            }}
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>refresh</span>
             <span>Retry</span>
           </button>
         )}
         <button
           type="button"
           onClick={onDismiss}
-          className="p-1.5 rounded-lg text-rose-400 hover:text-rose-100 hover:bg-rose-900/50 transition-colors"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '6px',
+            background: 'transparent',
+            border: '1px solid transparent',
+            borderRadius: '6px',
+            color: 'var(--color-error)',
+            cursor: 'pointer',
+          }}
+          aria-label="Dismiss error"
         >
-          <X className="w-4 h-4" />
+          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>close</span>
         </button>
       </div>
     </div>
