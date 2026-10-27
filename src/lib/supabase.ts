@@ -6,14 +6,21 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || 'https://placeholder-project.supabase.co';
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || 'placeholder-anon-key';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    '[Supabase] Missing environment variables: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set.'
+export const isSupabaseConfigured = Boolean(
+  import.meta.env.VITE_SUPABASE_URL &&
+  import.meta.env.VITE_SUPABASE_ANON_KEY &&
+  !import.meta.env.VITE_SUPABASE_URL.includes('<your-project-id>')
+);
+
+if (!isSupabaseConfigured) {
+  console.warn(
+    '[Supabase] VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are not configured. The app will run in Guest Mode.'
   );
 }
+
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
